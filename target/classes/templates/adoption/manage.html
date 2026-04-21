@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administracion de mascotas | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Adopcion responsable</p>
+            <h1>Administracion de mascotas en adopcion</h1>
+        </div>
+        <a th:href="@{/dashboard}" class="btn-back">Volver al panel</a>
+    </header>
+
+    <nav class="main-nav compact">
+        <a th:href="@{/adoption/catalog}" class="nav-link">Catalogo</a>
+        <a th:href="@{/adoption/manage}" class="nav-link active">Mascotas</a>
+        <a th:href="@{/adoption/records}" class="nav-link">Adopciones</a>
+    </nav>
+
+    <div class="toolbar">
+        <a th:href="@{/adoption/manage/new}" class="btn-primary">Registrar mascota</a>
+        <a th:href="@{/adoption/catalog}" class="btn-secondary">Ver catalogo publico</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="table-panel">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Edad</th>
+                <th>Genero</th>
+                <th>Ubicacion</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(pets)}">
+                <td colspan="10">No hay mascotas registradas para adopcion.</td>
+            </tr>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.id}">1</td>
+                <td>
+                    <img class="table-photo"
+                         th:if="${pet.photoUrl != null and !#strings.isEmpty(pet.photoUrl)}"
+                         th:src="${pet.photoUrl}"
+                         th:alt="${'Foto de ' + pet.name}">
+                    <span th:unless="${pet.photoUrl != null and !#strings.isEmpty(pet.photoUrl)}">Sin foto</span>
+                </td>
+                <td th:text="${pet.name}">Luna</td>
+                <td th:text="${@adoptionDisplay.species(pet.species)}">Perro</td>
+                <td th:text="${pet.breed}">Mestiza</td>
+                <td th:text="${pet.age}">3</td>
+                <td th:text="${@adoptionDisplay.gender(pet.gender)}">Hembra</td>
+                <td th:text="${pet.location}">Santiago Centro</td>
+                <td>
+                    <span class="status-badge"
+                          th:classappend="${@adoptionDisplay.statusBadgeClass(pet.status)}"
+                          th:text="${@adoptionDisplay.status(pet.status)}">Disponible</span>
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <a th:href="@{/adoption/manage/{id}(id=${pet.id})}" class="btn-small">Editar</a>
+                        <a th:if="${@adoptionDisplay.isAvailable(pet.status)}" th:href="@{/adoption/adopt/{id}(id=${pet.id})}" class="btn-small btn-success">Adoptar</a>
+                        <form th:action="@{/adoption/manage/{id}/delete(id=${pet.id})}" method="post" class="inline-form">
+                            <button type="submit" class="btn-small btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario mascota | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Mascotas en adopcion</p>
+            <h1 th:text="${formTitle}">Registrar animal de adopcion</h1>
+        </div>
+        <a th:href="@{/adoption/manage}" class="btn-back">Volver a mascotas</a>
+    </header>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <form th:action="${formAction}" th:object="${petRequest}" method="post" class="form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input id="name" type="text" th:field="*{name}" placeholder="Nombre de la mascota" required>
+            </div>
+            <div class="form-group">
+                <label for="species">Especie</label>
+                <input id="species" type="text" th:field="*{species}" placeholder="Perro, Gato" required>
+            </div>
+            <div class="form-group">
+                <label for="breed">Raza</label>
+                <input id="breed" type="text" th:field="*{breed}" placeholder="Mestiza, Labrador..." required>
+            </div>
+            <div class="form-group">
+                <label for="age">Edad</label>
+                <input id="age" type="number" min="0" th:field="*{age}" placeholder="2" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Genero</label>
+                <select id="gender" th:field="*{gender}" required>
+                    <option value="">Seleccione</option>
+                    <option value="Male">Macho</option>
+                    <option value="Female">Hembra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Estado de adopcion</label>
+                <select id="status" th:field="*{status}" required>
+                    <option value="AVAILABLE">Disponible</option>
+                    <option value="UNAVAILABLE">No disponible</option>
+                    <option value="ADOPTED">Adoptado</option>
+                </select>
+            </div>
+            <div class="form-group full-span">
+                <label for="location">Ubicacion</label>
+                <input id="location" type="text" th:field="*{location}" placeholder="Santiago Centro" required>
+            </div>
+            <div class="form-group full-span">
+                <label for="photoUrl">Foto URL</label>
+                <input id="photoUrl" type="url" th:field="*{photoUrl}" placeholder="https://...">
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="btn-primary">Guardar mascota</button>
+            <a th:href="@{/adoption/manage}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

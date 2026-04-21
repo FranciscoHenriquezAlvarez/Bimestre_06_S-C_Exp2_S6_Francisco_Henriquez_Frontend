@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Unidos por Los Animales</p>
+            <h1>Sistema de Gestion Veterinaria</h1>
+        </div>
+        <div class="user-info">
+            <span class="subtle-text" th:text="'Bienvenido, ' + ${currentUser}">Bienvenido, admin</span>
+            <form th:action="@{/logout}" method="post" class="inline-form">
+                <button type="submit" class="btn-logout">Cerrar sesion</button>
+            </form>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <a th:href="@{/patients}" class="nav-link">Pacientes</a>
+        <a th:href="@{/appointments}" class="nav-link">Citas</a>
+        <a th:href="@{/invoices}" class="nav-link">Facturas</a>
+        <a th:href="@{/adoption/catalog}" class="nav-link">Catalogo</a>
+        <a th:href="@{/adoption/manage}" class="nav-link">Mascotas en adopcion</a>
+        <a th:href="@{/adoption/records}" class="nav-link">Adopciones</a>
+    </nav>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="dashboard-cards">
+        <article class="card">
+            <h2>Pacientes</h2>
+            <p class="card-number" th:text="${patientsCount ?: 0}">0</p>
+            <a th:href="@{/patients}" class="btn-card">Ver pacientes</a>
+        </article>
+        <article class="card">
+            <h2>Citas programadas</h2>
+            <p class="card-number" th:text="${appointmentsCount ?: 0}">0</p>
+            <a th:href="@{/appointments}" class="btn-card">Ver citas</a>
+        </article>
+        <article class="card">
+            <h2>Facturas</h2>
+            <p class="card-number" th:text="${invoicesCount ?: 0}">0</p>
+            <a th:href="@{/invoices}" class="btn-card">Ver facturas</a>
+        </article>
+        <article class="card">
+            <h2>Mascotas en Adopcion</h2>
+            <p class="card-number" th:text="${catalogCount ?: 0}">0</p>
+            <a th:href="@{/adoption/manage}" class="btn-card">Administrar mascotas</a>
+        </article>        
+        <article class="card">
+            <h2>Adopciones registradas</h2>
+            <p class="card-number" th:text="${adoptionRecordsCount ?: 0}">0</p>
+            <a th:href="@{/adoption/records}" class="btn-card">Ver adopciones</a>
+        </article>
+    </section>
+
+    <section class="quick-actions">
+        <h2>Acciones rapidas</h2>
+        <div class="button-row">
+            <a th:href="@{/patients/new}" class="btn-action">Registrar nuevo paciente</a>
+            <a th:href="@{/appointments/new}" class="btn-action">Programar nueva cita</a>
+            <a th:href="@{/adoption/manage/new}" class="btn-action">Registrar mascota en adopcion</a>
+        </div>
+    </section>
+</div>
+</body>
+</html>

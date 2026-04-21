@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesion | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-body">
+<div class="container">
+    <section class="login-shell">
+        <div class="login-box">
+            <p class="eyebrow">Unidos por Los Animales</p>
+            <h1>Sistema de Gestion Veterinaria</h1>
+            <h2>Iniciar sesion</h2>
+            <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+            <form th:action="@{/login}" th:object="${loginRequest}" method="post" class="form">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input id="username" type="text" th:field="*{username}" placeholder="Ingrese su usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contrasena</label>
+                    <input id="password" type="password" th:field="*{password}" placeholder="Ingrese su contrasena" required>
+                </div>
+
+                <button type="submit" class="btn-primary full-width">Ingresar</button>
+            </form>
+
+            <div class="credentials-box">
+                <h2>Usuarios de prueba</h2>
+                <ul class="credentials-list">
+                    <li><strong>admin</strong> / 1234</li>
+                    <li><strong>recepcion1</strong> / 1234</li>
+                    <li><strong>vet1</strong> / 1234</li>
+                </ul>
+                <p class="helper-text">Utiliza una cuenta autorizada para ingresar al sistema.</p>
+            </div>
+
+            <div class="login-actions">
+                <a th:href="@{/adoption/catalog}" class="btn-secondary">Ver catalogo publico</a>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

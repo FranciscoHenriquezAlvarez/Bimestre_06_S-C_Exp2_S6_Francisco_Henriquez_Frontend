@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle factura | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Facturacion veterinaria</p>
+            <h1>Detalle de factura</h1>
+        </div>
+        <a th:href="@{/invoices}" class="btn-back">Volver a facturas</a>
+    </header>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section th:if="${invoice != null}" class="detail-card detail-card-wide">
+        <h2 th:text="'Factura #' + ${invoice.id}">Factura #1</h2>
+        <div class="button-row">
+            <a th:href="@{/invoices/{id}/pdf(id=${invoice.id})}" class="btn-action">Descargar PDF</a>
+        </div>
+        <div class="detail-grid">
+            <div>
+                <p><strong>Cita:</strong> <span th:text="${invoice.appointmentId}">2</span></p>
+                <p><strong>Paciente:</strong> <span th:text="${invoice.patientName}">Firulais</span></p>
+                <p><strong>Dueno:</strong> <span th:text="${invoice.owner}">Carlos Perez</span></p>
+                <p><strong>Veterinario:</strong> <span th:text="${invoice.veterinarian}">vet1</span></p>
+            </div>
+            <div>
+                <p><strong>Fecha:</strong> <span th:text="${invoice.date}">2026-04-19</span></p>
+                <p><strong>Hora:</strong> <span th:text="${invoice.time}">10:30</span></p>
+                <p><strong>Creada por:</strong> <span th:text="${invoice.createdBy}">admin</span></p>
+                <p><strong>Total:</strong> <span th:text="${'$' + invoice.totalCost}">$0.0</span></p>
+            </div>
+        </div>
+
+        <div class="detail-columns">
+            <article>
+                <h3>Servicios incluidos</h3>
+                <ul class="simple-list">
+                    <li th:if="${#lists.isEmpty(invoice.careNames)}">Sin servicios seleccionados.</li>
+                    <li th:each="careName : ${invoice.careNames}" th:text="${careName}">Consulta general</li>
+                </ul>
+            </article>
+            <article>
+                <h3>Medicamentos incluidos</h3>
+                <ul class="simple-list">
+                    <li th:if="${#lists.isEmpty(invoice.medicationNames)}">Sin medicamentos seleccionados.</li>
+                    <li th:each="medicationName : ${invoice.medicationNames}" th:text="${medicationName}">Analgésico</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+</div>
+</body>
+</html>

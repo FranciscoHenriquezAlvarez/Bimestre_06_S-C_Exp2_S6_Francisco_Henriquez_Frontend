@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar adopcion | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Adopcion responsable</p>
+            <h1>Registrar adopcion</h1>
+        </div>
+        <a th:href="@{/adoption/catalog}" class="btn-back">Volver al catalogo</a>
+    </header>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="detail-card" th:if="${pet != null}">
+        <h2 th:text="${pet.name}">Luna</h2>
+        <p th:text="${@adoptionDisplay.species(pet.species) + ' · ' + pet.breed}">Perro · Mestiza</p>
+        <p th:text="${'Estado actual: ' + @adoptionDisplay.status(pet.status)}">Estado actual: Disponible</p>
+        <p th:text="${'Ubicacion: ' + pet.location}">Ubicacion: Santiago Centro</p>
+    </section>
+
+    <form th:if="${pet != null}"
+          th:action="@{/adoption/adopt/{id}(id=${pet.id})}"
+          th:object="${adoptionRequest}"
+          method="post"
+          class="form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="adopterName">Nombre del adoptante</label>
+                <input id="adopterName" type="text" th:field="*{adopterName}" placeholder="Nombre completo" required>
+            </div>
+            <div class="form-group">
+                <label for="adopterEmail">Correo del adoptante</label>
+                <input id="adopterEmail" type="email" th:field="*{adopterEmail}" placeholder="correo@ejemplo.cl" required>
+            </div>
+            <div class="form-group">
+                <label for="adopterPhone">Telefono</label>
+                <input id="adopterPhone" type="text" th:field="*{adopterPhone}" placeholder="+56912345678" required>
+            </div>
+            <div class="form-group">
+                <label for="adoptionDate">Fecha adopcion</label>
+                <input id="adoptionDate" type="date" th:field="*{adoptionDate}">
+            </div>
+            <div class="form-group full-span">
+                <label for="adopterAddress">Direccion</label>
+                <input id="adopterAddress" type="text" th:field="*{adopterAddress}" placeholder="Direccion del hogar">
+            </div>
+            <div class="form-group full-span">
+                <label for="notes">Notas</label>
+                <textarea id="notes" th:field="*{notes}" rows="4" placeholder="Observaciones para el seguimiento de adopcion"></textarea>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="btn-primary">Confirmar adopcion</button>
+            <a th:href="@{/adoption/catalog}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

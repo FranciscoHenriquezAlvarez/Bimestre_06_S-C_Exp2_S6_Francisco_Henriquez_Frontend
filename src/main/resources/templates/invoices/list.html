@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Facturacion veterinaria</p>
+            <h1>Facturas</h1>
+            <p class="subtle-text" th:if="${appointmentId != null}" th:text="'Consultando facturas de la cita #' + ${appointmentId}"></p>
+        </div>
+        <a th:href="@{/dashboard}" class="btn-back">Volver al panel</a>
+    </header>
+
+    <nav class="main-nav compact">
+        <a th:href="@{/patients}" class="nav-link">Pacientes</a>
+        <a th:href="@{/appointments}" class="nav-link">Citas</a>
+        <a th:href="@{/invoices}" class="nav-link active">Facturas</a>
+        <a th:href="@{/adoption/manage}" class="nav-link">Adopciones</a>
+    </nav>
+
+    <div class="toolbar">
+        <a th:href="@{/appointments}" class="btn-secondary">Ir a citas para facturar</a>
+        <a th:if="${appointmentId != null}" th:href="@{/invoices}" class="btn-secondary">Ver todas</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="table-panel">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cita</th>
+                <th>Paciente</th>
+                <th>Veterinario</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Creada por</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(invoices)}">
+                <td colspan="8">No hay facturas para mostrar.</td>
+            </tr>
+            <tr th:each="invoice : ${invoices}">
+                <td th:text="${invoice.id}">1</td>
+                <td th:text="${invoice.appointmentId}">2</td>
+                <td th:text="${invoice.patientName}">Firulais</td>
+                <td th:text="${invoice.veterinarian}">vet1</td>
+                <td th:text="${invoice.date}">2026-04-19</td>
+                <td th:text="${'$' + invoice.totalCost}">$0.0</td>
+                <td th:text="${invoice.createdBy}">admin</td>
+                <td>
+                    <div class="table-actions">
+                        <a th:href="@{/invoices/{id}(id=${invoice.id})}" class="btn-small">Detalle</a>
+                        <a th:href="@{/invoices/{id}/pdf(id=${invoice.id})}" class="btn-small btn-success">PDF</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

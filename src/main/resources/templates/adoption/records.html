@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopciones registradas | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Adopcion responsable</p>
+            <h1>Adopciones registradas</h1>
+            <p class="subtle-text">Seguimiento de adopciones realizadas desde el catalogo de mascotas.</p>
+        </div>
+        <a th:href="@{/dashboard}" class="btn-back">Volver al panel</a>
+    </header>
+
+    <nav class="main-nav compact">
+        <a th:href="@{/adoption/catalog}" class="nav-link">Catalogo</a>
+        <a th:href="@{/adoption/manage}" class="nav-link">Mascotas</a>
+        <a th:href="@{/adoption/records}" class="nav-link active">Adopciones</a>
+    </nav>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="table-panel">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Animal</th>
+                <th>Adoptante</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+                <th>Fecha adopcion</th>
+                <th>Detalle</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(records)}">
+                <td colspan="7">No hay registros de adopcion.</td>
+            </tr>
+            <tr th:each="record : ${records}">
+                <td th:text="${record.id}">1</td>
+                <td th:text="${record.petName}">Luna</td>
+                <td th:text="${record.adopterName}">Maria Tester</td>
+                <td th:text="${record.adopterEmail}">maria@test.cl</td>
+                <td th:text="${record.adopterPhone}">+56912345678</td>
+                <td th:text="${record.adoptionDate}">2026-04-19</td>
+                <td>
+                    <a th:href="@{/adoption/records/{id}(id=${record.id})}" class="btn-small">Ver detalle</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

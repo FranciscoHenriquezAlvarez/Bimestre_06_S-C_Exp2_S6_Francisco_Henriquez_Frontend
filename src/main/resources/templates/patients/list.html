@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Atencion veterinaria</p>
+            <h1>Pacientes</h1>
+        </div>
+        <a th:href="@{/dashboard}" class="btn-back">Volver al panel</a>
+    </header>
+
+    <nav class="main-nav compact">
+        <a th:href="@{/patients}" class="nav-link active">Pacientes</a>
+        <a th:href="@{/appointments}" class="nav-link">Citas</a>
+        <a th:href="@{/invoices}" class="nav-link">Facturas</a>
+        <a th:href="@{/adoption/manage}" class="nav-link">Adopciones</a>
+    </nav>
+
+    <div class="toolbar">
+        <a th:href="@{/patients/new}" class="btn-primary">Nuevo paciente</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="table-panel">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Edad</th>
+                <th>Dueno</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(patients)}">
+                <td colspan="6">No hay pacientes cargados.</td>
+            </tr>
+            <tr th:each="patient : ${patients}">
+                <td th:text="${patient.id}">1</td>
+                <td th:text="${patient.name}">Firulais</td>
+                <td th:text="${patient.species}">Perro</td>
+                <td th:text="${patient.breed}">Labrador</td>
+                <td th:text="${patient.age}">3</td>
+                <td th:text="${patient.owner}">Carlos Perez</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

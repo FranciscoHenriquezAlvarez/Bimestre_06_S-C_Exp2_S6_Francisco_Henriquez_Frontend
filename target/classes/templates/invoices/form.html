@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva factura | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Facturacion veterinaria</p>
+            <h1>Crear factura</h1>
+        </div>
+        <a th:href="@{/appointments}" class="btn-back">Volver a citas</a>
+    </header>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="detail-grid" th:if="${appointment != null}">
+        <article class="detail-card">
+            <h2>Datos de la cita</h2>
+            <p><strong>ID cita:</strong> <span th:text="${appointment.id}">1</span></p>
+            <p><strong>Paciente:</strong> <span th:text="${appointment.patientName}">Firulais</span></p>
+            <p><strong>Dueno:</strong> <span th:text="${appointment.owner}">Carlos Perez</span></p>
+            <p><strong>Fecha:</strong> <span th:text="${appointment.date}">2026-04-19</span></p>
+            <p><strong>Hora:</strong> <span th:text="${appointment.time}">10:30</span></p>
+            <p><strong>Veterinario:</strong> <span th:text="${appointment.veterinarian}">vet1</span></p>
+            <p><strong>Motivo:</strong> <span th:text="${appointment.reason}">Control</span></p>
+        </article>
+
+        <article class="detail-card" th:if="${existingInvoices != null}">
+            <h2>Facturas previas de esta cita</h2>
+            <ul class="simple-list">
+                <li th:if="${#lists.isEmpty(existingInvoices)}">Esta cita aun no tiene facturas.</li>
+                <li th:each="invoice : ${existingInvoices}">
+                    <span th:text="${'Factura #' + invoice.id + ' - $' + invoice.totalCost}">Factura #1 - $0</span>
+
+                    <div class="table-actions">
+                        <a th:href="@{/invoices/{id}(id=${invoice.id})}" class="btn-small">Detalle</a>
+                        <a th:href="@{/invoices/{id}/pdf(id=${invoice.id})}" class="btn-small btn-success">PDF</a>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </section>
+
+    <form th:if="${appointment != null}"
+          th:action="@{/invoices/new/{id}(id=${appointment.id})}"
+          th:object="${invoiceRequest}"
+          method="post"
+          class="form stacked-form">
+        <div class="selection-panel">
+            <div class="selection-card">
+                <h2>Servicios disponibles</h2>
+                <label class="check-row" th:each="care : ${cares}">
+                    <input type="checkbox" th:field="*{careIds}" th:value="${care.id}">
+                    <span th:text="${care.name + ' - $' + care.cost}"></span>
+                </label>
+                <p th:if="${#lists.isEmpty(cares)}" class="subtle-text">No hay servicios disponibles.</p>
+            </div>
+
+            <div class="selection-card">
+                <h2>Medicamentos disponibles</h2>
+                <label class="check-row" th:each="medication : ${medications}">
+                    <input type="checkbox" th:field="*{medicationIds}" th:value="${medication.id}">
+                    <span th:text="${medication.name + ' - $' + medication.cost}"></span>
+                </label>
+                <p th:if="${#lists.isEmpty(medications)}" class="subtle-text">No hay medicamentos disponibles.</p>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="btn-primary">Crear factura desde cita</button>
+            <a th:href="@{/invoices(appointmentId=${appointment.id})}" class="btn-secondary">Ver facturas de la cita</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

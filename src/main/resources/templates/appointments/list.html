@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas | Sistema Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Agenda veterinaria</p>
+            <h1>Citas programadas</h1>
+        </div>
+        <a th:href="@{/dashboard}" class="btn-back">Volver al panel</a>
+    </header>
+
+    <nav class="main-nav compact">
+        <a th:href="@{/patients}" class="nav-link">Pacientes</a>
+        <a th:href="@{/appointments}" class="nav-link active">Citas</a>
+        <a th:href="@{/invoices}" class="nav-link">Facturas</a>
+        <a th:href="@{/adoption/manage}" class="nav-link">Adopciones</a>
+    </nav>
+
+    <div class="toolbar">
+        <a th:href="@{/appointments/new}" class="btn-primary">Nueva cita</a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="table-panel">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Paciente</th>
+                <th>Dueno</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Motivo</th>
+                <th>Veterinario</th>
+                <th>Facturacion</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(appointments)}">
+                <td colspan="8">No hay citas registradas.</td>
+            </tr>
+            <tr th:each="appointment : ${appointments}">
+                <td th:text="${appointment.id}">1</td>
+                <td th:text="${appointment.patientName}">Firulais</td>
+                <td th:text="${appointment.owner}">Carlos Perez</td>
+                <td th:text="${appointment.date}">2026-04-19</td>
+                <td th:text="${appointment.time}">10:30</td>
+                <td th:text="${appointment.reason}">Control</td>
+                <td th:text="${appointment.veterinarian}">vet1</td>
+                <td>
+                    <div class="table-actions">
+                        <a th:href="@{/invoices(appointmentId=${appointment.id})}" class="btn-small">Ver facturas</a>
+                        <a th:href="@{/invoices/new/{id}(id=${appointment.id})}" class="btn-small btn-success">Crear factura</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

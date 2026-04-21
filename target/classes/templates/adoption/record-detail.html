@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de adopcion | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Adopcion responsable</p>
+            <h1>Detalle de adopcion</h1>
+        </div>
+        <a th:href="@{/adoption/records}" class="btn-back">Volver a adopciones</a>
+    </header>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section th:if="${record != null}" class="detail-card detail-card-wide">
+        <h2 th:text="'Adopcion #' + ${record.id}">Adopcion #1</h2>
+        <div class="detail-grid">
+            <div>
+                <p><strong>ID mascota:</strong> <span th:text="${record.petId}">1</span></p>
+                <p><strong>Animal:</strong> <span th:text="${record.petName}">Luna</span></p>
+                <p><strong>Fecha adopcion:</strong> <span th:text="${record.adoptionDate}">2026-04-19</span></p>
+            </div>
+            <div>
+                <p><strong>Adoptante:</strong> <span th:text="${record.adopterName}">Maria Tester</span></p>
+                <p><strong>Correo:</strong> <span th:text="${record.adopterEmail}">maria@test.cl</span></p>
+                <p><strong>Telefono:</strong> <span th:text="${record.adopterPhone}">+56912345678</span></p>
+            </div>
+        </div>
+        <p><strong>Direccion:</strong> <span th:text="${record.adopterAddress ?: 'Sin direccion'}">Providencia</span></p>
+        <p><strong>Notas:</strong> <span th:text="${record.notes ?: 'Sin notas adicionales'}">Adopcion desde prueba</span></p>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo de mascotas | Unidos por Los Animales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Unidos por Los Animales</p>
+            <h1>Catalogo publico de mascotas</h1>
+            <p class="subtle-text">Conoce las mascotas disponibles para una adopcion responsable</p>
+        </div>
+        <div class="button-row">
+            <a th:if="${authenticated}" th:href="@{/dashboard}" class="btn-secondary">Ir al panel</a>
+            <a th:unless="${authenticated}" th:href="@{/login}" class="btn-primary">Iniciar sesion</a>
+        </div>
+    </header>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <section class="filter-panel">
+        <h2>Buscar mascotas</h2>
+        <form method="get" th:action="@{/adoption/catalog}" class="form-inline-grid">
+            <div class="form-group">
+                <label for="species">Especie</label>
+                <input id="species" name="species" type="text" th:value="${species}" placeholder="Perro, Gato">
+            </div>
+            <div class="form-group">
+                <label for="location">Ubicacion</label>
+                <input id="location" name="location" type="text" th:value="${location}" placeholder="Santiago, Maipu...">
+            </div>
+            <div class="form-group">
+                <label for="gender">Genero</label>
+                <select id="gender" name="gender">
+                    <option value="">Todos</option>
+                    <option value="Macho" th:selected="${@adoptionDisplay.isGender(gender, 'Macho')}">Macho</option>
+                    <option value="Hembra" th:selected="${@adoptionDisplay.isGender(gender, 'Hembra')}">Hembra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="age">Edad</label>
+                <input id="age" name="age" type="number" min="0" th:value="${age}" placeholder="2">
+            </div>
+            <div class="button-row align-end">
+                <button type="submit" class="btn-primary">Buscar</button>
+                <a th:href="@{/adoption/catalog}" class="btn-secondary">Limpiar filtros</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="catalog-summary">
+        <h2>Mascotas disponibles</h2>
+        <p th:text="'Resultados encontrados: ' + ${#lists.size(pets)}">Resultados encontrados: 0</p>
+    </section>
+
+    <section class="catalog-grid" th:if="${!#lists.isEmpty(pets)}">
+        <article class="catalog-card" th:each="pet : ${pets}">
+            <div class="catalog-image-wrapper">
+                <img th:if="${pet.photoUrl != null and !#strings.isEmpty(pet.photoUrl)}"
+                     th:src="${pet.photoUrl}"
+                     th:alt="${'Foto de ' + pet.name}"
+                     class="catalog-image">
+                <div th:unless="${pet.photoUrl != null and !#strings.isEmpty(pet.photoUrl)}" class="catalog-image-placeholder">
+                    Sin foto
+                </div>
+            </div>
+
+            <div class="catalog-content">
+                <div class="catalog-title-row">
+                    <h3 th:text="${pet.name}">Luna</h3>
+                    <span class="status-badge"
+                          th:classappend="${@adoptionDisplay.statusBadgeClass(pet.status)}"
+                          th:text="${@adoptionDisplay.status(pet.status)}">Disponible</span>
+                </div>
+                <p th:text="${@adoptionDisplay.species(pet.species) + ' · ' + pet.breed}">Perro · Mestiza</p>
+                <p th:text="${'Edad: ' + pet.age + ' anos'}">Edad: 3 anos</p>
+                <p th:text="${'Genero: ' + @adoptionDisplay.gender(pet.gender)}">Genero: Hembra</p>
+                <p th:text="${'Ubicacion: ' + pet.location}">Ubicacion: Santiago Centro</p>
+
+                <div class="table-actions">
+                    <a th:if="${authenticated}" th:href="@{/adoption/adopt/{id}(id=${pet.id})}" class="btn-small btn-success">Registrar adopcion</a>
+                    <a th:if="${authenticated}" th:href="@{/adoption/manage/{id}(id=${pet.id})}" class="btn-small">Gestionar</a>
+                    <a th:unless="${authenticated}" th:href="@{/login}" class="btn-small">Iniciar sesion para adoptar</a>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(pets)}">
+        <h2>No se encontraron mascotas con esos criterios</h2>
+        <p>Prueba limpiando filtros o ajustando especie, ubicacion, genero o edad.</p>
+    </section>
+</div>
+</body>
+</html>
